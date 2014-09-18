@@ -4,7 +4,7 @@ import time
 if __name__ == '__main__' :
 
     start_time = time.time()
-    my_ga = vyky.GeneticAlgorithm( generations=10 , population_length=100 , mutation_rate=1 , tsp_instance='pr2392.tsp', print_info=True)
+    my_ga = vyky.GeneticAlgorithm( generations=100 , population_length=2 , mutation_rate=0.9 , tsp_instance='pr2392.tsp', print_info=True)
     
     result = my_ga.run()
     end_time = time.time()
