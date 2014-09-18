@@ -12,18 +12,31 @@ __author__ = 'Ramon M.'
 __version__ = '0.1.0'
 __license__ = 'GPL-3.0'
 
+
 from math      import sqrt , pow
 from traceback import print_exc , format_exc
 from random    import randint , shuffle , sample
 from copy      import deepcopy
-from time      import time 
+from time      import time
 
 import json
+import os
+
+print_information = False
+
+def printer(text):
+    if print_information:
+        print text
+
+def clear_scr():
+    if print_information:
+        os.system('cls' if os.name=='nt' else 'clear')
+
 
 class TSPInstance :
 
     def __init__( self , tsp_file  ):
-        
+        printer("Uploading data from: {}\n".format(tsp_file))
         tsp = ''.join( open( tsp_file , 'r' ) ).split('\n') 
         
         entries = {}
@@ -40,6 +53,8 @@ class TSPInstance :
         entries[tsp[6]] = list( tmp )
         entries['DIMENSION'] = int( entries['DIMENSION'] )
         self.__dict__.update( entries )
+        printer("Data uploaded.\n\nCities created: {}".format(entries['DIMENSION']))
+
         
     def __str__( self ):
         
@@ -47,7 +62,7 @@ class TSPInstance :
 
 class GeneticAlgorithm :
     
-    def __init__( self , generations , population_length , mutation_rate , tsp_instance ):
+    def __init__( self , generations , population_length , mutation_rate , tsp_instance , print_info=False):
         
         self.generations = generations
         
@@ -62,6 +77,9 @@ class GeneticAlgorithm :
         self.mutation_rate = mutation_rate
         
         self.tour_per_generations = []
+
+        global print_information
+        print_information = print_info
         
     def run( self ):
         
@@ -83,7 +101,9 @@ class GeneticAlgorithm :
             # ---------------------------------------------------
             
             for i in xrange( self.generations ):
-                
+                clear_scr()
+                printer("Generation {}".format(i))
+
                 # --- fitness
                 
                 self.population = sorted( self.population , key = lambda tour : tour.cost )
@@ -195,4 +215,3 @@ class City :
     def as_tuple( self ):
         
         return ( self.name , self.x , self.y )
-        
